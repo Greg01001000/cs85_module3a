@@ -19,7 +19,7 @@
             }
             else {      // Only clean up the input if it isn't empty
                 $retval = trim($data);  // Remove leading & trailing spaces
-                $retval = stripslashes($retval);
+                $retval = stripslashes($retval);    // Remove slashes
             }
 
             return($retval); }  // Return the cleaned or empty data
@@ -48,6 +48,26 @@
         return($retval);  // Return the cleaned or empty data
         }
         
+        /* This function takes one parameter for each form field (placeholder text) and
+        displays the form with buttons to clear the form and to submit the form */
+        function displayForm($Sender, $Email, $Subject, $Message) {
+            ?> <h2 style = "text-align:center">Contact Me</h2> <!-- Center form title -->
+            <form name="contact" action="ContactForm.php" method="post">
+                <p>Your Name:
+                    <input type="text" name="Sender" value="<?php echo $Sender; ?>" /></p>
+                <p>Your E-mail:
+                    <input type="text" name="Email" value="<?php echo $Email; ?>" /></p>
+                <p>Subject:
+                    <input type="text" name="Subject" value="<?php echo $Subject; ?>" /></p>
+                <p>Message:<br />
+                    <textarea name="Message"><?php echo $Message; ?></textarea></p>
+                <!-- Button to clear form -->
+                <p><input type="reset" value="Clear Form" />&nbsp; &nbsp;
+                    <!-- Button to submit form -->
+                    <input type="submit" name="Submit" value="Send Form" /></p>
+            </form>
+
+        <?php }
     ?>
 </body>
 </html>
