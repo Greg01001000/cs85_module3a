@@ -76,6 +76,21 @@
         $Email = '';
         $Subject = '';
         $Message = '';
+
+        /* If user submitted form, check each field for missing or invalid data
+        using the custom functions defined above. If no errors are found, get ready
+        to show the form. */
+        if (isset($_POST['Submit'])) {
+            $Sender = validateInput($_POST['Sender'],'Your Name');
+            $Email = validateEmail($_POST['Email'],'Your E-mail');
+            $Subject = validateInput($_POST['Subject'],'Subject');
+            $Message = validateInput($_POST['Message'],'Message');
+            // If user submitted form and an error was found, get ready to show form
+            if ($errorCount==0)
+                $ShowForm = FALSE;
+            else
+                $ShowForm = TRUE;
+        }
     ?>
 </body>
 </html>
