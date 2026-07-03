@@ -68,6 +68,14 @@
             </form>
 
         <?php }
+
+        // Initialize variables
+        $ShowForm = TRUE;
+        $errorCount = 0;
+        $Sender = '';
+        $Email = '';
+        $Subject = '';
+        $Message = '';
     ?>
 </body>
 </html>
