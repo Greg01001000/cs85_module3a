@@ -53,6 +53,7 @@
         function displayForm($Sender, $Email, $Subject, $Message) {
             ?> <h2 style = "text-align:center">Contact Me</h2> <!-- Center form title -->
             <form name="contact" action="ContactForm.php" method="post">
+                <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                 <p>Your Name:
                     <input type="text" name="Sender" value="<?php echo $Sender; ?>" /></p>
                 <p>Your E-mail:
@@ -71,6 +72,9 @@
 
         // Initialize variables
         $ShowForm = TRUE;
+        // Without this line here (global $errorCount), $errorCount inside and outside
+        // the user-defined functions above are different variables
+        global $errorCount; 
         $errorCount = 0;
         $Sender = '';
         $Email = '';
@@ -78,8 +82,8 @@
         $Message = '';
 
         /* If user submitted form, check each field for missing or invalid data
-        using the custom functions defined above. If no errors are found, get ready
-        to show the form. */
+        using the custom functions defined above. Email address has its own validation
+        function. If no errors are found, get ready to show the form. */
         if (isset($_POST['Submit'])) {
             $Sender = validateInput($_POST['Sender'],'Your Name');
             $Email = validateEmail($_POST['Email'],'Your E-mail');
@@ -90,6 +94,28 @@
                 $ShowForm = FALSE;
             else
                 $ShowForm = TRUE;
+        }
+
+        /* If the form hasn't been displayed, or if the user submitted unsatisfactory
+        input, display the form. If the user submitted unsatisfactory input, tell the 
+        user. Else (if the user submitted satisfactory input), prepare to email the
+        input, and tell the user whether the message is able to be sent. */
+        if ($ShowForm == TRUE) {
+            if ($errorCount>0)
+                echo "<p>Please re-enter the form information below.</p>\n";
+            displayForm($Sender, $Email, $Subject, $Message);
+        }
+        else {  // The user submitted satisfactory input. Prepare to email it.
+            $SenderAddress = "$Sender <$Email>";
+            $Headers = "From: $SenderAddress\nCC: $SenderAddress\n"; // User gets a copy
+
+            // Send the email
+            $result = mail('recipient@example.com', $Subject, $Message, $Headers);
+
+            if ($result)    // Show the user a status message
+                echo "<p>Your message has been sent. Thank you, " . $Sender . ".</p>\n";
+            else
+                echo "<p>There was an error sending your message, " . $Sender . ".</p>\n";
         }
     ?>
 </body>
