@@ -41,8 +41,15 @@
 
                 // Is the user-supplied data in a valid email address format?
                 if (!filter_var($retval, FILTER_VALIDATE_EMAIL)) {
-                    // If not, tell the user it's invalid
-                    echo "\"$fieldName\" is not a valid e-mail address.<br />\n";
+                    /* If not, tell the user it's invalid. The code supplied in the
+                    assignment instructions have $fieldName, which is incorrect, in the 
+                    line below--it should be either $retval or $data, to show the user
+                    what they submitted. */
+                    echo "\"$retval\" is not a valid e-mail address.<br />\n";
+                    /* The assignment instructions omit ++$errorCount below, but w/o it,
+                    if no other errors are found in the submitted data, the code below will 
+                    try to email the data to the invalid address. */
+                    ++$errorCount;
                 }
             }
         return($retval);  // Return the cleaned or empty data
@@ -53,6 +60,8 @@
         function displayForm($Sender, $Email, $Subject, $Message) {
             ?> <h2 style = "text-align:center">Contact Me</h2> <!-- Center form title -->
             <form name="contact" action="ContactForm.php" method="post">
+                <!--Laravel Herd requires a hidden token field in any POST form, to protect 
+                against CSRF.-->
                 <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                 <p>Your Name:
                     <input type="text" name="Sender" value="<?php echo $Sender; ?>" /></p>
