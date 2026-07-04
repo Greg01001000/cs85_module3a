@@ -73,7 +73,8 @@
         // Initialize variables
         $ShowForm = TRUE;
         // Without this line here (global $errorCount), $errorCount inside and outside
-        // the user-defined functions above are different variables
+        // the user-defined functions above are different variables when Laravel Herd
+        // runs this code
         global $errorCount; 
         $errorCount = 0;
         $Sender = '';
